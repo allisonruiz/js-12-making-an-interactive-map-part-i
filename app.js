@@ -38,7 +38,7 @@ addMarkers () {
     },
 
 }
-//get coordinates vis geolocation api
+//get coordinates via geolocation api
 
 async function getCoords(){
     pos = await new Promise((resolve, reject) => {
@@ -49,13 +49,29 @@ async function getCoords(){
 }
 
 //get foursquare businesses
-
+async function getFoursquare(business) {
+    const options = {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          Authorization: 'pk.eyJ1IjoiYWxsaWNvZGVzIiwiYSI6ImNsMmp2amU1MzBnbTEzaW84YjV3a25hMmIifQ.1M4R3j1H2_d3LYVktpflrg'
+        }
+      };
+      
+      fetch('https://api.foursquare.com/v3/places/search?query=restaurants%2C%20coffee%2C%20hotels%2C%20gyms&radius=25&categories=restaurants%2C%20coffee%2C%20hotels%2C%20gyms&sort=DISTANCE', options)
+        .then(response => response.json())
+        .then(response => console.log(response))
+        .catch(err => console.error(err));
+    let limit = 5
+    let lat = myMap.coordinates[0]
+    let long = myMap.coordinates[1]
+    let response = await fetch(`https://api.foursquare.com/v3/places/search?&query=${business}&limit=${limit}&ll=${lat}%2C${lon}`, options)
+    let data = await response.text()
+    let parsedData = JSON.parse(data)
+    let businesses = parsedData.results
+    return businesses
+}
 //console.log(await getCoords()); 
-window.onload = async () => {
-    const coords = await getCoords()
-    console.log(coords)
-    const map = L.map('map').setView([coords[0], coords[1]], 13);
-}                             
 
 
 
@@ -65,5 +81,12 @@ window.onload = async () => {
 //event handlers
 
 //window load
+window.onload = async () => {
+    const coords = await getCoords()
+    console.log(coords)
+    const map = L.map('map').setView([coords[0], coords[1]], 13);
+}                             
+
+
 
 //business submit button
