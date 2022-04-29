@@ -58,7 +58,7 @@ async function getFoursquare(business) {
         }
       };
       
-      fetch('https://api.foursquare.com/v3/places/search?query=restaurants%2C%20coffee%2C%20hotels%2C%20gyms&radius=25&categories=restaurants%2C%20coffee%2C%20hotels%2C%20gyms&sort=DISTANCE', options)
+      fetch('https://api.foursquare.com/v3/places/search?query=restaurants%2C%20coffee%2C%20hotels%2C%20gyms&ll=0%2C%201&radius=25&categories=restaurants%2C%20coffee%2C%20hotels%2C%20gyms&near=ll&sort=DISTANCE&limit=5', options)
         .then(response => response.json())
         .then(response => console.log(response))
         .catch(err => console.error(err));
@@ -84,9 +84,7 @@ async function getFoursquare(business) {
 window.onload = async () => {
     const coords = await getCoords()
     console.log(coords)
-    const map = L.map('map').setView([coords[0], coords[1]], 13);
-}                             
-
+}
 
 
 //business submit button
